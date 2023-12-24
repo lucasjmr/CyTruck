@@ -1,2 +1,4 @@
-structure/arborescence des fichiers/dossiers : LUCAS
-verifications options et affichage aide : LUCAS
+structure/arborescence des fichiers/dossiers : Lucas
+verifications options et affichage aide : Lucas
+option d1 : Lucas
+option d2 : Lucas
