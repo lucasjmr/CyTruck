@@ -3,3 +3,9 @@ verifications options et affichage aide : Lucas
 option d1 : Lucas
 option d2 : Lucas
 option L : Lucas
+
+
+Planning : 
+23/12 soir : structure of program and verifications
+24/12 9h-18h : Options d1, d2, L
+25/12 : Options S and T
