@@ -55,7 +55,7 @@ Options :
 
 # ------------------------------ VERIFY OPTIONS ------------------------------
 
-if [[ $# -lt 2 ]] || [[ $# -gt 6 ]] ; then #If number of options is lower than 2 or higher (both strict)than 5, error.
+if [[ $# -lt 2 ]] || [[ $# -gt 6 ]] ; then # If number of options is lower than 2 or higher (both strict) than 5, error.
     echo 'Wrong number of options -> ./main.sh <path_to_data_file> -h for help.' >&2
     exit 1
 elif [[ ! -f "$1" ]] ; then # Checks if first option is the csv.
@@ -63,18 +63,24 @@ elif [[ ! -f "$1" ]] ; then # Checks if first option is the csv.
     exit 2
 fi
 
-declare -a options_array=("$@") # Saves entered options in an array
+CSV_PATH="$1" # Saves the path of the csv (first option) before using SHIFT command
+shift # Shifts to the first option
+declare -a options_array=("$@") # Saves entered options (exept path) in an array
 check=0
 
 for i in "${options_array[@]}" # Checks if there are wrong options and -h
-do 
+do
     case "$i" in 
         "-h" ) 
+            echo 'help option'
             check=1 ;;
-        "-d1" | "-d2" | "-l" | "-t" | "-s" ) ;;
+        "-d1" | "-d2" | "-l" | "-t" | "-s" ) 
+            echo 'other option'
+            ;;
         *) # If there are, exit program
             echo 'One or more specified options are not valid -> ./main.sh <path_to_data_file> -h for help.' >&2
-            exit 3 ;;
+            exit 3 
+            ;;
     esac
 done
 
@@ -101,9 +107,6 @@ if [ ! -f 'progc/cfiles/main.c' ] || [ ! -f 'progc/headers/header.h' ] || [ ! -f
 fi
 
 # ------------------------------ MAIN PROCESS OF OPTIONS ------------------------------ 
-
-CSV_PATH="$1" # Saves the path of the csv before using SHIFT command
-shift # Shifts to the first option
 
 while [ "$#" -gt 0 ] ; do # Process every options 
     case "$1" in 
