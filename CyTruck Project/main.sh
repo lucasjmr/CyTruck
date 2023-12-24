@@ -1,5 +1,30 @@
 #!/bin/bash
 
+d1_process()
+{
+    echo 'Starting d1 processing ...'
+    start_time=$(date +%s)
+
+    # Create csv with top 10 drivers <number of occurence>;<driver name> in temp/datad1.csv
+    tail -n+2 data/data.csv | awk -F';' '{driver_array[$6]++} END {for (i in driver_array) print i ";" driver_array[i]}' | sort -t';' -k2 -n | tail -n10 > temp/datad1.csv
+    # Removes the useless first line containing data infos
+    # 
+    # AWK - 
+    #   {count[$6]++} : creates associative array with the 6th field (driver name), and add 1 for each occurence.
+    #   END : Waits for all lines to be processed. 
+    #   {for (i in driver_array) print i ";" driver_array[i]} : formates the output file to be <nbr_of_occurences>;<driver_name>
+    # 
+    # sorts driver names, most routes at the top, less routes at bottom of file 
+    # keeps first 10 drivers, prints them in temp/datad1.csv
+
+    echo 'Generating histogram ...'
+
+    echo "set title 'Option -d1 : Nb routes = f(Driver)' ; set yrange [-1:10] ; set style fill solid ; set xlabel 'NB ROUTES' ; set ylabel 'DRIVER NAMES' ; set datafile separator ';' ; set terminal png ; set output 'images/d1.png' ; plot 'temp/datad1.csv' using (\$2*0.5):0:(\$2*0.5):(0.3):yticlabels(1) with boxxyerrorbars t ''" | gnuplot
+
+    end_time=$(date +%s)
+    echo "Finished d1 process and plot in $(( end_time - start_time )) seconds."
+}
+
 print_help()
 {
     echo 'Welcome to the DOCUMENTATION ;D
@@ -72,10 +97,8 @@ for i in "${options_array[@]}" # Checks if there are wrong options and -h
 do
     case "$i" in 
         "-h" ) 
-            echo 'help option'
             check=1 ;;
         "-d1" | "-d2" | "-l" | "-t" | "-s" ) 
-            echo 'other option'
             ;;
         *) # If there are, exit program
             echo 'One or more specified options are not valid -> ./main.sh <path_to_data_file> -h for help.' >&2
@@ -111,15 +134,21 @@ fi
 while [ "$#" -gt 0 ] ; do # Process every options 
     case "$1" in 
         "-d1") 
-            echo 'Do D1' ;;
+            echo 'Do D1' 
+            d1_process
+            ;;
         "-d2") 
-            echo 'Do D2' ;;
+            echo 'Do D2' 
+            ;;
         "-l") 
-            echo 'Do L' ;;
+            echo 'Do L' 
+            ;;
         "-t") 
-            echo 'Do T' ;;
+            echo 'Do T' 
+            ;;
         "-s") 
-            echo 'Do S' ;;
+            echo 'Do S' 
+            ;;
     esac
     shift
 done 
