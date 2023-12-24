@@ -10,7 +10,7 @@ d1_process()
     # Removes the useless first line containing data infos
     # 
     # AWK - 
-    #   {count[$6]++} : creates associative array with the 6th field (driver name), and add 1 for each occurence.
+    #   {driver_array[$6]++} : creates associative array with the 6th field (driver name), and add 1 for each occurence.
     #   END : Waits for all lines to be processed. 
     #   {for (i in driver_array) print i ";" driver_array[i]} : formates the output file to be <driver name>;<number of occurence>
     # 
@@ -19,7 +19,7 @@ d1_process()
 
     echo 'Generating histogram ...'
 
-    echo "set title 'Option -d1 : Nb routes = f(Driver)' ; set yrange [-1:10] ; set style fill solid ; set xlabel 'NB ROUTES' ; set ylabel 'DRIVER NAMES' ; set datafile separator ';' ; set terminal png ; set output 'images/d1.png' ; plot 'temp/datad1.csv' using (\$2*0.5):0:(\$2*0.5):(0.3):yticlabels(1) with boxxyerrorbars t ''" | gnuplot
+    echo "set title 'Option -d1 : Nb routes = f(Driver)' ; set xtics font 'DejaVuSans,8' ; set yrange [-1:10] ; set style fill solid ; set xlabel 'NB ROUTES' ; set ylabel 'DRIVER NAMES' ; set datafile separator ';' ; set terminal png ; set output 'images/d1.png' ; plot 'temp/datad1.csv' using (\$2*0.5):0:(\$2*0.5):(0.3):yticlabels(1) with boxxyerrorbars t ''" | gnuplot
 
     end_time=$(date +%s)
     echo "Finished d1 data file process and plot in $(( end_time - start_time )) seconds."
@@ -35,9 +35,9 @@ d2_process()
     # Removes the useless first line containing data infos
     # 
     # AWK - 
-    #   {count[$6]+=$5} : creates associative array with the 6th field (driver name), and add every distance (5th field) to the associated driver
+    #   {distance_array[$6]+=$5} : creates associative array with the 6th field (driver name), and add every distance (5th field) to the associated driver
     #   END : Waits for all lines to be processed. 
-    #   {for (i in distance_array) print i ";" distance_array[i]} : formates the output file to be <driver_name>;<disctance>
+    #   {for (i in distance_array) print i ";" distance_array[i]} : formates the output file to be <driver_name>;<distance>
     # 
     # sorts driver names, most distance at the bottom, less distance at the top of file 
     # keeps last 10 drivers, prints them in temp/datad2.csv
@@ -48,6 +48,31 @@ d2_process()
 
     end_time=$(date +%s)
     echo "Finished d2 data file process and plot in $(( end_time - start_time )) seconds."
+}
+
+Lprocess()
+{
+    echo 'Starting L process ...'
+    start_time=$(date +%s)
+
+    tail -n+2 data/data.csv | awk -F';' '{route_array[$1]+=$5} END {for (i in route_array) print i ";" route_array[i]}' | sort -t';' -k2 -n | tail -n10 | sort -r > temp/dataL.csv
+    # Removes the useless first line containing data infos
+    # 
+    # AWK - 
+    #   {route_array[$1]+=$5} : creates associative array with the 1th field (route id), and add every distance (5th field) to the associated route
+    #   END : Waits for all lines to be processed. 
+    #   {for (i in route_array) print i ";" route_array[i]} : formates the output file to be <route_id>;<total_distance>
+    # 
+    # sorts total route distances, most distance at the bottom, less distance at the top of file 
+    # keeps last 10 drivers
+    # sorts route id then prints them in temp/dataL.csv
+
+    echo 'Generating histogram ...'
+
+    echo "set title 'Option -l : Distance = f(Route)' ; set ytics 500 ; set yrange [0:*] ; set datafile separator ';' ; set xtics font 'DejaVuSans,8' ; set xlabel 'Route ID' ; set ylabel 'DISTANCE (km)' ; set style data histograms ; set style fill solid ; set terminal png ; set output 'images/L.png' ; plot 'temp/dataL.csv' using 2:xticlabels(1) notitle" | gnuplot
+
+    end_time=$(date +%s)
+    echo "Finished L data file process and plot in $(( end_time - start_time )) seconds."
 }
 
 print_help()
@@ -165,7 +190,7 @@ while [ "$#" -gt 0 ] ; do # Process every options
             d2_process
             ;;
         "-l") 
-            echo 'Do L' 
+            Lprocess 
             ;;
         "-t") 
             echo 'Do T' 
