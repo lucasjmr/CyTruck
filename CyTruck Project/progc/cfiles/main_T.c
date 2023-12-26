@@ -259,7 +259,7 @@ int main()
     fgets(header, sizeof(header), file); // Skips header line
     if (fscanf(file, "%*[^;];%*[^;];%63[^;];%63[^;];%*[^;];%*[^\n]", town1, town2) != 2)
     {
-        printf("Error while gettings varaibles of csv.\n");
+        printf("Error while gettings variables of csv.\n");
         exit(1);
     }
 
