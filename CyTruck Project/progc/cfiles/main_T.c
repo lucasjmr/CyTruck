@@ -22,38 +22,6 @@ int max3(int a, int b, int c)
     return (temp > c) ? temp : c;
 }
 
-int DoesLeftExist(pAVL root)
-{
-    if (root == NULL)
-    {
-        return 0;
-    }
-    else if (root->left != NULL)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int DoesRightExist(pAVL root)
-{
-    if (root == NULL)
-    {
-        return 0;
-    }
-    else if (root->right != NULL)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
 pAVL CreateAVL(char *town, int start_or_end)
 {
     pAVL node = malloc(sizeof(struct AVL_T));
