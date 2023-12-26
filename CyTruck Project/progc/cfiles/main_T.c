@@ -259,14 +259,6 @@ TopCities *CreateTop10CitiesArray(pAVL root)
     return GetCityInfo(root, array, &index);
 }
 
-void printStructArray(TopCities *array)
-{
-    for (int i = 0; i < 10; i++)
-    {
-        printf("Name: %s, Total: %d, Start : %d\n", array[i].City, array[i].TotalRouteNumber, array[i].Start);
-    }
-}
-
 void PrintDataInCSV(TopCities *array)
 {
     FILE *file = fopen("temp/dataT.csv", "w");
