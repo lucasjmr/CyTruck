@@ -1,26 +1,5 @@
 #!/bin/bash
 
-
-
-
-
-
-
-
-
-
-
-
-
-# ATTENTION : A FAIRE PLUS TARD : VERIFIER QU'ON FAIT PAS PLUSIEURS FOIS LE MEME ARGUMENT SI : ./main.sh data/data.csv -d1 -d1 -d1 -d1 -d1 .... etc
-
-
-
-
-
-
-
-
 d1_process()
 {
     echo 'Starting d1 process ...'
@@ -184,15 +163,28 @@ fi
 CSV_PATH="$1" # Saves the path of the csv (first option) before using SHIFT command
 shift # Shifts to the first option
 declare -a options_array=("$@") # Saves entered options (exept path) in an array
-check=0
+checkh=0
+checkd1=0
+checkd2=0
+checkl=0
+checkt=0
+checks=0
 
-for i in "${options_array[@]}" # Checks if there are wrong options and -h
+for i in "${options_array[@]}" # Checks if there are wrong options, -h, or more than one given option 
 do
     case "$i" in 
         "-h" ) 
-            check=1 ;;
-        "-d1" | "-d2" | "-l" | "-t" | "-s" ) 
-            ;;
+            ((checkh++));;
+        "-d1" )
+            ((checkd1++));;
+        "-d2" )
+            ((checkd2++));;
+        "-l" ) 
+            ((checkl++));;
+        "-t" )
+            ((checkt++));;
+        "-s" ) 
+            ((checks++));;
         *) # If there are, exit program
             echo 'One or more specified options are not valid -> ./main.sh <path_to_data_file> -h for help.' >&2
             exit 3 
@@ -200,7 +192,10 @@ do
     esac
 done
 
-if [ "$check" -eq 1 ] ; then # If there is -h and no wrong option, print help
+if [ "$checkh" -gt 1 ] || [ "$checkd1" -gt 1 ] || [ "$checkd2" -gt 1 ] || [ "$checkl" -gt 1 ] || [ "$checkt" -gt 1 ] || [ "$checks" -gt 1 ] ; then # If there is -h and no wrong option, print help
+    echo 'You must specify option only one time.'
+    exit 0
+elif [ "$checkh" -eq 1 ]; then
     print_help
     exit 0
 fi
