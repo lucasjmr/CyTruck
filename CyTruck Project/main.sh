@@ -1,5 +1,26 @@
 #!/bin/bash
 
+
+
+
+
+
+
+
+
+
+
+
+
+# ATTENTION : A FAIRE PLUS TARD : VERIFIER QU'ON FAIT PAS PLUSIEURS FOIS LE MEME ARGUMENT SI : ./main.sh data/data.csv -d1 -d1 -d1 -d1 -d1 .... etc
+
+
+
+
+
+
+
+
 d1_process()
 {
     echo 'Starting d1 process ...'
@@ -17,9 +38,9 @@ d1_process()
     # sorts driver names, most routes at the bottom, less routes at the top of file 
     # keeps last 10 drivers, prints them in temp/datad1.csv
 
-    echo 'Generating histogram ...'
+    echo 'Generating d1 histogram ...'
 
-    echo "set title 'Option -d1 : Nb routes = f(Driver)' ; set xtics font 'DejaVuSans,8' ; set yrange [-1:10] ; set style fill solid ; set xlabel 'NB ROUTES' ; set ylabel 'DRIVER NAMES' ; set datafile separator ';' ; set terminal png ; set output 'images/d1.png' ; plot 'temp/datad1.csv' using (\$2*0.5):0:(\$2*0.5):(0.3):yticlabels(1) with boxxyerrorbars t ''" | gnuplot
+    echo "set title 'Option -d1 : Nb routes = f(Driver)' ; set xtics font 'DejaVuSans,8' ; set yrange [-1:10] ; set style fill solid border -1 ; set xlabel 'NB ROUTES' ; set ylabel 'DRIVER NAMES' ; set datafile separator ';' ; set terminal png ; set output 'images/d1.png' ; plot 'temp/datad1.csv' using (\$2*0.5):0:(\$2*0.5):(0.3):yticlabels(1) with boxxyerrorbars t ''" | gnuplot
 
     end_time=$(date +%s)
     echo "Finished d1 data file process and plot in $(( end_time - start_time )) seconds."
@@ -42,9 +63,9 @@ d2_process()
     # sorts driver names, most distance at the bottom, less distance at the top of file 
     # keeps last 10 drivers, prints them in temp/datad2.csv
 
-    echo 'Generating histogram ...'
+    echo 'Generating d2 histogram ...'
 
-    echo "set title 'Option -d2 : Distance = f(Driver)' ; set yrange [-1:10] ; set style fill solid ; set xlabel 'DISTANCE (km)' ; set ylabel 'DRIVER NAMES' ; set datafile separator ';' ; set terminal png ; set output 'images/d2.png' ; set xtics font 'DejaVuSans,8' ; plot 'temp/datad2.csv' using (\$2*0.5):0:(\$2*0.5):(0.3):yticlabels(1) with boxxyerrorbars t ''" | gnuplot
+    echo "set title 'Option -d2 : Distance = f(Driver)' ; set yrange [-1:10] ; set style fill solid border -1; set xlabel 'DISTANCE (km)' ; set ylabel 'DRIVER NAMES' ; set datafile separator ';' ; set terminal png ; set output 'images/d2.png' ; set xtics font 'DejaVuSans,8' ; plot 'temp/datad2.csv' using (\$2*0.5):0:(\$2*0.5):(0.3):yticlabels(1) with boxxyerrorbars t ''" | gnuplot
 
     end_time=$(date +%s)
     echo "Finished d2 data file process and plot in $(( end_time - start_time )) seconds."
@@ -67,12 +88,34 @@ Lprocess()
     # keeps last 10 drivers
     # sorts route id then prints them in temp/dataL.csv
 
-    echo 'Generating histogram ...'
+    echo 'Generating L histogram ...'
 
-    echo "set title 'Option -l : Distance = f(Route)' ; set ytics 500 ; set yrange [0:*] ; set datafile separator ';' ; set xtics font 'DejaVuSans,8' ; set xlabel 'Route ID' ; set ylabel 'DISTANCE (km)' ; set style data histograms ; set style fill solid ; set terminal png ; set output 'images/L.png' ; plot 'temp/dataL.csv' using 2:xticlabels(1) notitle" | gnuplot
+    echo "set title 'Option -l : Distance = f(Route)' ; set ytics 500 ; set yrange [0:*] ; set datafile separator ';' ; set xtics font 'DejaVuSans,8' ; set xlabel 'Route ID' ; set ylabel 'DISTANCE (km)' ; set style data histograms ; set style fill solid border -1 ; set terminal png ; set output 'images/L.png' ; plot 'temp/dataL.csv' using 2:xticlabels(1) notitle" | gnuplot
 
     end_time=$(date +%s)
     echo "Finished L data file process and plot in $(( end_time - start_time )) seconds."
+}
+
+Tprocess()
+{
+    echo 'Starting T process ...'
+    start_time=$(date +%s)
+
+    # 1. Make the executable by calling makefile
+    cd progc/makefileFolder
+    make t
+    cd ../..
+
+    # 2. Run Tprocess
+    ./temp/Tprocess
+
+    # 3. Create plot
+    echo 'Generating Clustered histogram ...'
+    echo "set terminal png ; set output 'images/T.png' ; set title 'Option -t : Nb routes = f(Towns)' ; set style data histogram ; set style histogram clustered ; set style fill solid border -1 ; set boxwidth 0.9 ; set xtics rotate by -45 ; set xlabel 'TOWN NAMES' font 'DejaVuSans,8' ; set ylabel 'NB ROUTES' ; set datafile separator ';' ; plot 'temp/dataT.csv' using 2:xtic(1) title 'Total routes', '' using 3 title 'First town'" | gnuplot
+
+    end_time=$(date +%s)
+    echo "Finished T data file process and plot in $(( end_time - start_time )) seconds."
+    # JE FAIS QUOI ICI POUR FAIRE 'make t' PUIS EXECUTER 'TPROCESS' ?
 }
 
 print_help()
@@ -174,7 +217,7 @@ else
     mkdir 'temp'
 fi
 
-if [ ! -f 'progc/cfiles/main.c' ] || [ ! -f 'progc/headers/header.h' ] || [ ! -f 'progc/makefile/makefile' ]; then # Checks if c, header or makefile file are missing
+if [ ! -f 'progc/cfiles/main_T.c' ] || [ ! -f 'progc/headers/header_T.h' ] || [ ! -f 'progc/makefileFolder/makefile' ] || [ ! -f 'progc/cfiles/main_S.c' ] || [ ! -f 'progc/headers/header_S.h' ] ; then # Checks if c, header or makefile file are missing
     echo 'C file and/or header and/or makefile are missing from "progc/"' >&2
     exit 4
 fi
@@ -193,7 +236,7 @@ while [ "$#" -gt 0 ] ; do # Process every options
             Lprocess 
             ;;
         "-t") 
-            echo 'Do T' 
+            Tprocess 
             ;;
         "-s") 
             echo 'Do S' 
