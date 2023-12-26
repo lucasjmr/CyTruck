@@ -262,11 +262,9 @@ int main()
         printf("Error while gettings variables of csv.\n");
         exit(1);
     }
-
-    // ------------------------------------------------
-
     pAVL root = CreateAVL(town1, 1);
     root = InsertInAVL(root, town2, &h, 2);
+    
     // Create AVL from CSV file
     root = CreateAVLfromCSV(file, root, &h);
     fclose(file);
