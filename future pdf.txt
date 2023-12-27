@@ -4,10 +4,12 @@ option d1 : Lucas
 option d2 : Lucas
 option L : Lucas
 option T : Lucas
-
+option S : Lucas
 
 Planning : 
-23/12 soir : structure of program and verifications
+23/12 night : structure of program and verifications
 24/12 : Options d1, d2, L
 25/12 : TD AVL
-26/12 : Option T et S ?
+26/12 : Option T and S (80%)
+27/12 : S done 100%
+28/12+ : fixes
