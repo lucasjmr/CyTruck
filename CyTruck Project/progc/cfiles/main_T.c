@@ -259,7 +259,7 @@ int main()
     fgets(header, sizeof(header), file); // Skips header line
     if (fscanf(file, "%*[^;];%*[^;];%63[^;];%63[^;];%*[^;];%*[^\n]", town1, town2) != 2)
     {
-        printf("Error while gettings variables of csv.\n");
+        printf("Error while gettings varaibles of csv.\n");
         exit(1);
     }
     pAVL root = CreateAVL(town1, 1);
@@ -274,7 +274,6 @@ int main()
     TopCities *topCitiesArray = CreateTop10CitiesArray(root);
     PrintDataInCSV(topCitiesArray);
 
-    free(topCitiesArray);
-    free(root);
+    // No need to free AVL and array because program terminates
     return 0;
 }
