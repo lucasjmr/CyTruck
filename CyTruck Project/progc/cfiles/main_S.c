@@ -191,6 +191,7 @@ TopRouteID *GetRouteInfo(pAVL root, TopRouteID *array, int *index)
     {
         array = GetRouteInfo(root->left, array, index);
         array = GetRouteInfo(root->right, array, index);
+        
         if (*index < 50) // array not full
         {
             array[*index].RouteID = root->RouteID;
@@ -271,7 +272,7 @@ TopRouteID *SortArray(TopRouteID *array)
 
 void PrintDataInCSV(TopRouteID *array)
 {
-    FILE *file = fopen("../../temp/dataS.csv", "w");
+    FILE *file = fopen("temp/dataS.csv", "w");
     if (file == NULL)
     {
         printf("Error while trying to create dataS.csv\n");
@@ -293,10 +294,10 @@ int main()
     char header[256];
     int h = 0;
 
-    FILE *file = fopen("../../data/data.csv", "r");
+    FILE *file = fopen("data/data.csv", "r");
     if (file == NULL)
     {
-        printf("Error while trying to open data/data.csv\n");
+        printf("Error while trying to open csv file.\n");
         exit(1);
     }
 
