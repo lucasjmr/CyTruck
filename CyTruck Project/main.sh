@@ -250,10 +250,15 @@ else
     mkdir 'temp'
 fi
 
-if [ $(wc -l < "$CSV_PATH") -lt 51 ] ; then # If the number of lines in given csv is lower than 51 (50 lines + header)
-    echo 'The data file you gave is not valid. Must be more than 50 lines'
+start_time=$(date +%s)
+echo 'Checking if the data file you gave is valid or not. Please wait (8s max)'
+if [ "$(awk -F';' ' NR > 1 {a[$1]++} END {for (i in a) if (a[i] >= 1) count++} END { print count }' "$CSV_PATH")" -lt 50 ] ; then # If the number of lines is lower than 50
+    echo 'The data file you gave is not valid. Must be more than 50 uniques RouteId' >&2
     exit 6
 fi
+end_time=$(date +%s)
+echo "File is valid. Operation took $(( end_time - start_time )) seconds."
+
 
 if [ ! -f 'progc/cfiles/main_T.c' ] || [ ! -f 'progc/headers/header_T.h' ] || [ ! -f 'progc/makefileFolder/makefile' ] || [ ! -f 'progc/cfiles/main_S.c' ] || [ ! -f 'progc/headers/header_S.h' ] ; then # Checks if c, header or makefile file are missing
     echo 'C file and/or header and/or makefile are missing from "progc/"' >&2
