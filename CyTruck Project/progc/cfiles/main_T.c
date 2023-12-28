@@ -132,7 +132,7 @@ pAVL InsertInAVL(pAVL root, char *town, int *h, int start_or_end)
         *h = 1;
         return CreateAVL(town, start_or_end);
     }
-    else if (strcmp(town, root->City) < 0) // var < root->var
+    else if (strcmp(town, root->City) < 0)
     {
         root->left = InsertInAVL(root->left, town, h, start_or_end);
         *h = -*h;
@@ -144,11 +144,25 @@ pAVL InsertInAVL(pAVL root, char *town, int *h, int start_or_end)
     else // Town already exists
     {
         *h = 0;
-        // UPDATE INFOS
-        root->TotalRouteNumber++;
-        if (start_or_end == 1)
+
+        if (/* PAS DEJA RENCONTRE LA MEME ROUTEID */)
         {
-            root->Start++;
+            if (start_or_end == 1)
+            {
+                root->Start++;
+                root->TotalRouteNumber++;
+            }
+            else if (start_or_end == 2)
+            {
+                root->TotalRouteNumber++;
+            }
+        }
+        else // ON A DEJA RENCONTRE : CAS ville d'arrivée et depart de l'autre etape.
+        {
+            if (start_or_end == 1) // le premier cas etait la ville d'arrivée, donc on augmente de 1 la ville de départ.
+            {
+                root->Start++;
+            }
         }
         return root;
     }
@@ -198,19 +212,31 @@ TopCities *GetCityInfo(pAVL root, TopCities *array, int *index)
         }
         else
         {
-            for (int i = 0; i < 10; i++)
+            int minIndex = 0;                               // index of lowest (totalroutenumber)
+            int minTotalRoutes = array[0].TotalRouteNumber; // the lowest is for now the first totalroutenumber of the array
+
+            // Find the lowest by going through array
+            for (int i = 1; i < 10; i++)
             {
-                if (array[i].TotalRouteNumber < root->TotalRouteNumber)
+                int currentTotalRoutes = array[i].TotalRouteNumber;
+                if (currentTotalRoutes < minTotalRoutes)
                 {
-                    strcpy(array[i].City, root->City);
-                    array[i].TotalRouteNumber = root->TotalRouteNumber;
-                    array[i].Start = root->Start;
-                    break;
+                    minTotalRoutes = currentTotalRoutes;
+                    minIndex = i; // Saves index of lower totalroutes
                 }
             }
+
+            // Compare the lowest totalroutes of array and the totalroutes of current root
+            if (root->TotalRouteNumber > minTotalRoutes)
+            {
+                // Replace values by new ones
+                strcpy(array[minIndex].City, root->City);
+                array[minIndex].TotalRouteNumber = root->TotalRouteNumber;
+                array[minIndex].Start = root->Start;
+            }
         }
+        return array;
     }
-    return array;
 }
 
 TopCities *CreateTop10CitiesArray(pAVL root)
@@ -251,7 +277,7 @@ int main()
     FILE *file = fopen("data/data.csv", "r");
     if (file == NULL)
     {
-        printf("Error while trying to open data/data.csv\n");
+        printf("Error while trying to open csv file.\n");
         exit(1);
     }
 
@@ -264,7 +290,7 @@ int main()
     }
     pAVL root = CreateAVL(town1, 1);
     root = InsertInAVL(root, town2, &h, 2);
-    
+
     // Create AVL from CSV file
     root = CreateAVLfromCSV(file, root, &h);
     fclose(file);
