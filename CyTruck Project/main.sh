@@ -20,7 +20,7 @@ d1_process()
     start_time=$(date +%s)
 
     # Create csv with top 10 drivers <driver name>;<number of occurence> in temp/datad1.csv
-    awk -F ';' 'NR > 1 { key=$6";"$1; if (!(key in driver_array)) { driver_array[key] = 1; array[$6]++; }} END { for (i in array) { print i ";" array[i]; }}' "$CSV_PATH" | sort -t';' -k2 -nr | head -10 > temp/datad1.csv
+    awk -F ';' 'NR > 1 { key=$6";"$1; if (!(key in driver_array)) { driver_array[key] = 1; array[$6]++; }} END { for (i in array) { print i ";" array[i]; }}' "$CSV_PATH" | sort -t';' -k2 -n | tail -n10 > temp/datad1.csv
     # NR > 1 Removes the useless first line containing data infos
     # 
     # AWK - 
