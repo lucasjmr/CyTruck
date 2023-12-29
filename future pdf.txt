@@ -5,6 +5,8 @@ option d2 : Lucas
 option L : Lucas
 option T : Lucas
 option S : Lucas
+option d3 : rub1
+option d4 : rub1
 
 Planning : 
 23/12 night : structure of program and verifications
@@ -12,4 +14,5 @@ Planning :
 25/12 : TD AVL
 26/12 : Option T and S (80%)
 27/12 : S done 100%
-28/12+ : fixes
+28/12 : fixes
+29/12 : biggy
