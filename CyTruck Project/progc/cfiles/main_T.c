@@ -268,13 +268,13 @@ void PrintDataInCSV(TopCities *array)
     fclose(file);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     char town1[64], town2[64];
     char header[256];
     int h = 0;
 
-    FILE *file = fopen("data/data.csv", "r");
+    FILE *file = fopen(argv[1], "r");
     if (file == NULL)
     {
         printf("Error while trying to open csv file.\n");
