@@ -1,19 +1,5 @@
 #!/bin/bash
 
-
-
-
-
-
-
-
-
-# ATTENTION : REFAIRE POUR QUE CA OUVRE LE FICHIER CSV PASSE EN ARGUMENT ET NON TOUJOURS DATA.CSV
-# LE PATH EST STOCKE DANS $(CSV_PATH)
-
-
-
-
 d1_process()
 {
     echo 'Starting d1 process ...'
@@ -102,7 +88,7 @@ Tprocess()
     start_time=$(date +%s)
 
     # 2. Run Tprocess
-    ./temp/Tprocess
+    ./temp/Tprocess "$CSV_PATH"
 
     # 3. Create plot
     echo 'Generating Clustered histogram ...'
@@ -124,7 +110,7 @@ Sprocess()
     start_time=$(date +%s)
     
     # 2. Run Tprocess
-    ./temp/Sprocess
+    ./temp/Sprocess "$CSV_PATH"
 
     # 3. Create plot
     echo 'Generating filledcurves plot ...'
@@ -250,6 +236,7 @@ else
     mkdir 'temp'
 fi
 
+
 start_time=$(date +%s)
 echo 'Checking if the data file you gave is valid or not. Please wait (8s max)'
 if [ "$(awk -F';' ' NR > 1 {a[$1]++} END {for (i in a) if (a[i] >= 1) count++} END { print count }' "$CSV_PATH")" -lt 50 ] ; then # If the number of lines is lower than 50
@@ -258,6 +245,7 @@ if [ "$(awk -F';' ' NR > 1 {a[$1]++} END {for (i in a) if (a[i] >= 1) count++} E
 fi
 end_time=$(date +%s)
 echo "File is valid. Operation took $(( end_time - start_time )) seconds."
+
 
 
 if [ ! -f 'progc/cfiles/main_T.c' ] || [ ! -f 'progc/headers/header_T.h' ] || [ ! -f 'progc/makefileFolder/makefile' ] || [ ! -f 'progc/cfiles/main_S.c' ] || [ ! -f 'progc/headers/header_S.h' ] ; then # Checks if c, header or makefile file are missing
