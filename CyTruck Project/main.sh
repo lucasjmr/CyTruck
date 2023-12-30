@@ -5,7 +5,7 @@ Wprocess()
 while IFS= read -r line; do
     echo -e "\e[32m$line\e[0m"
     sleep 0.05
-done < Welcome.txt
+done < 'ascii/welcome.txt'
 }
 
 d1_process()
@@ -182,7 +182,7 @@ Pprocess()
 while IFS= read -r line; do
     echo -e "\e[32m$line\e[0m"
     sleep 0.1
-done < art.txt
+done < 'ascii/art.txt'
 }
 
 
@@ -284,7 +284,7 @@ do
             ((checkl++));;
         "-t" )
             ((checkt++));;
-	"-p" )
+	    "-p" )
             ((checkp++));;
         "-w" )
             ((checkw++));;
@@ -356,7 +356,7 @@ while [ "$#" -gt 0 ] ; do # Process every options
         "-t") 
             Tprocess 
             ;;
-	"-p") 
+	    "-p") 
             Pprocess 
             ;;
         "-w") 
