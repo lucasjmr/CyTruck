@@ -1,5 +1,12 @@
 #!/bin/bash
 
+Wprocess(){
+while IFS= read -r line; do
+    echo -e "\e[32m$line\e[0m"
+    sleep 0.05
+done < Welcome.txt
+}
+
 d1_process()
 {
     echo 'Starting d1 process ...'
@@ -169,6 +176,16 @@ Sprocess()
     echo "Finished S data file process and plot in $(( end_time - start_time )) seconds."
 }
 
+Pprocess(){
+
+
+while IFS= read -r line; do
+    echo -e "\e[32m$line\e[0m"
+    sleep 0.1
+done < art.txt
+}
+
+
 print_help()
 {
     echo 'Welcome to the DOCUMENTATION ;D
@@ -182,6 +199,8 @@ Options :
 	- l : creates a vertical histogram in "images/" with top 10 longest routes.
 	- t : creates a grouped histogram in "images/" with top 10 cities visited by the routes.
 	- s : creates a graphic  with max/min et average distance per step for 50 routes.
+ 	- w : create a fabulous Welcome text animation.
+  	- p : it's an easter egg.
 
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⣖⣤⣶⣿⣿⣿⣿⣿⣭⡶⠶⠒⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠈⠉⠁⠒⠤⠀⡔⠄⠀⠂
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡴⢋⣥⣾⣿⣿⣿⣿⣿⣿⡿⠛⠁⢀⣠⠔⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠛⠓⢤⡀⠀⠀⢀⣀⠈⠂⠉⠀
@@ -226,7 +245,7 @@ Options :
 
 # ------------------------------ VERIFY OPTIONS ------------------------------
 
-if [[ $# -lt 2 ]] || [[ $# -gt 8 ]] ; then # If number of options is lower than 2 or higher (both strict) than 5, error.
+if [[ $# -lt 1 ]] || [[ $# -gt 10 ]] ; then # If number of options is lower than 2 or higher (both strict) than 5, error.
     echo 'Wrong number of options -> ./main.sh <path_to_data_file> -h for help.' >&2
     exit 1
 elif [[ ! -f "$1" ]] ; then # Checks if first option is the csv.
@@ -245,6 +264,8 @@ checkd4=0
 checkl=0
 checkt=0
 checks=0
+checkp=0
+checkw=0
 
 for i in "${options_array[@]}" # Checks if there are wrong options, -h, or more than one given option 
 do
@@ -263,6 +284,10 @@ do
             ((checkl++));;
         "-t" )
             ((checkt++));;
+	"-p" )
+            ((checkp++));;
+        "-w" )
+            ((checkw++));;
         "-s" ) 
             ((checks++));;
         *) # If there are, exit program
@@ -272,7 +297,7 @@ do
     esac
 done
 
-if [ "$checkh" -gt 1 ] || [ "$checkd1" -gt 1 ] || [ "$checkd2" -gt 1 ] || [ "$checkd3" -gt 1 ] || [ "$checkd4" -gt 1 ] || [ "$checkl" -gt 1 ] || [ "$checkt" -gt 1 ] || [ "$checks" -gt 1 ] ; then # If there is -h and no wrong option, print help
+if [ "$checkh" -gt 1 ] || [ "$checkd1" -gt 1 ] || [ "$checkd2" -gt 1 ] || [ "$checkd3" -gt 1 ] || [ "$checkd4" -gt 1 ] || [ "$checkl" -gt 1 ] || [ "$checkt" -gt 1 ] || [ "$checks" -gt 1 ] || [ "$checkp" -gt 1 ] ||  [ "$checkw" -gt 1 ]; then # If there is -h and no wrong option, print help
     echo 'You must specify option only one time.'
     exit 0
 elif [ "$checkh" -eq 1 ]; then
@@ -330,6 +355,12 @@ while [ "$#" -gt 0 ] ; do # Process every options
             ;;
         "-t") 
             Tprocess 
+            ;;
+	"-p") 
+            Pprocess 
+            ;;
+        "-w") 
+            Wprocess 
             ;;
         "-s") 
             Sprocess
