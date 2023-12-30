@@ -1,6 +1,7 @@
 #!/bin/bash
 
-Wprocess(){
+Wprocess()
+{
 while IFS= read -r line; do
     echo -e "\e[32m$line\e[0m"
     sleep 0.05
@@ -176,9 +177,8 @@ Sprocess()
     echo "Finished S data file process and plot in $(( end_time - start_time )) seconds."
 }
 
-Pprocess(){
-
-
+Pprocess()
+{
 while IFS= read -r line; do
     echo -e "\e[32m$line\e[0m"
     sleep 0.1
@@ -200,7 +200,7 @@ Options :
 	- t : creates a grouped histogram in "images/" with top 10 cities visited by the routes.
 	- s : creates a graphic  with max/min et average distance per step for 50 routes.
  	- w : create a fabulous Welcome text animation.
-  	- p : it's an easter egg.
+  	- p : it'\''s an easter egg.
 
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⣖⣤⣶⣿⣿⣿⣿⣿⣭⡶⠶⠒⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠈⠉⠁⠒⠤⠀⡔⠄⠀⠂
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡴⢋⣥⣾⣿⣿⣿⣿⣿⣿⡿⠛⠁⢀⣠⠔⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠛⠓⢤⡀⠀⠀⢀⣀⠈⠂⠉⠀
@@ -245,7 +245,7 @@ Options :
 
 # ------------------------------ VERIFY OPTIONS ------------------------------
 
-if [[ $# -lt 1 ]] || [[ $# -gt 10 ]] ; then # If number of options is lower than 2 or higher (both strict) than 5, error.
+if [[ $# -lt 2 ]] || [[ $# -gt 10 ]] ; then # If number of options is lower than 2 or higher (both strict) than 5, error.
     echo 'Wrong number of options -> ./main.sh <path_to_data_file> -h for help.' >&2
     exit 1
 elif [[ ! -f "$1" ]] ; then # Checks if first option is the csv.
