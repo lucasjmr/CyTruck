@@ -7,6 +7,8 @@ option T : Lucas
 option S : Lucas
 option d3 : rub1
 option d4 : rub1
+option w : maxime
+option p : maxime
 
 Planning : 
 23/12 night : structure of program and verifications
