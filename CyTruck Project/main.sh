@@ -323,7 +323,7 @@ if [ ! -f 'progc/cfiles/main_T.c' ] || [ ! -f 'progc/headers/header_T.h' ] || [ 
 fi
 
 # Plays music to wait for the processes
-paplay "music.mp3" &
+paplay "music.wav" &
 
 start_time=$(date +%s)
 echo 'Checking if the data file you gave is valid or not. Please wait (8s max)'
