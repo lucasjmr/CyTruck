@@ -59,6 +59,30 @@ d2_process()
     echo "Finished d2 data file process and plot in $(( end_time - start_time )) seconds."
 }
 
+d5_process()
+{
+    echo 'Starting d5 process ...'
+    start_time=$(date +%s)
+
+    # Creates csv with top 10 routes by step ID <driver_name>;<distance> in temp/datad5.csv
+    awk -F';' ' NR > 1 {ID_array[$1]+=1} END {for (i in ID_array) print i ";" ID_array[i]}' "$CSV_PATH" | sort -t';' -k2 -n | tail -n10 > temp/datad5.csv
+    # NR > 1 : Removes the useless first line containing data infos
+    # 
+    # AWK - 
+    #   {ID_array[$1]+=1} : creates associative array with the 1st field (routeID), and add 1 for every step (2nd field) to the associated routeID
+    #   END : Waits for all lines to be processed. 
+    #   {for (i in ID_array) print i ";" ID_array[i]} : formates the output file to be <routeID>;<stepID>
+    # 
+    # sorts routes id, less at the top more at the bottom 
+    # Keeps 10 routes ID with the most step ID
+    echo 'Generating d5 histogram ...'
+
+   echo "set title 'Option -d5 : Number of steps = f(routeID)' ; set yrange [-1:10] ; set style fill solid border -1; set xlabel 'NB OF STEPS' ; set ylabel 'ROUTE ID' ; set datafile separator ';' ; set terminal png ; set output 'images/d5.png' ; set xtics font 'DejaVuSans,8' ; plot 'temp/datad5.csv' using (\$2*0.5):0:(\$2*0.5):(0.3):yticlabels(1) with boxxyerrorbars t ''" | gnuplot
+
+    end_time=$(date +%s)
+    echo "Finished d5 data file process and plot in $(( end_time - start_time )) seconds."
+}
+
 d3_process()
 {
 	 echo 'starting d3 process ...'
@@ -196,6 +220,7 @@ Options :
 	- d2 : creates an horizontal histogram in "images/" with top 10 drivers by number of kilometers traveled.
 	- d3 : creates an horizontal histogram in "images/" with last 10 drivers by number of routes.
 	- d4 : creates an horizontal histogram in "images/" with top 10 drivers by number of kilometers traveled.
+        - d5 : creates an horizontal histogram in "images/" with top 10 routesID by number of steps
 	- l : creates a vertical histogram in "images/" with top 10 longest routes.
 	- t : creates a grouped histogram in "images/" with top 10 cities visited by the routes.
 	- s : creates a graphic  with max/min et average distance per step for 50 routes.
@@ -245,7 +270,7 @@ Options :
 
 # ------------------------------ VERIFY OPTIONS ------------------------------
 
-if [[ $# -lt 2 ]] || [[ $# -gt 10 ]] ; then # If number of options is lower than 2 or higher (both strict) than 5, error.
+if [[ $# -lt 2 ]] || [[ $# -gt 11 ]] ; then # If number of options is lower than 2 or higher (both strict) than 11, error.
     echo 'Wrong number of options -> ./main.sh <path_to_data_file> -h for help.' >&2
     exit 1
 elif [[ ! -f "$1" ]] ; then # Checks if first option is the csv.
@@ -261,6 +286,7 @@ checkd1=0
 checkd2=0
 checkd3=0
 checkd4=0
+checkd5=0
 checkl=0
 checkt=0
 checks=0
@@ -280,6 +306,8 @@ do
             ((checkd3++));;
         "-d4" )
             ((checkd4++));;
+        "-d5" )
+            ((checkd5++));;
         "-l" ) 
             ((checkl++));;
         "-t" )
@@ -297,7 +325,7 @@ do
     esac
 done
 
-if [ "$checkh" -gt 1 ] || [ "$checkd1" -gt 1 ] || [ "$checkd2" -gt 1 ] || [ "$checkd3" -gt 1 ] || [ "$checkd4" -gt 1 ] || [ "$checkl" -gt 1 ] || [ "$checkt" -gt 1 ] || [ "$checks" -gt 1 ] || [ "$checkp" -gt 1 ] ||  [ "$checkw" -gt 1 ]; then # If there is -h and no wrong option, print help
+if [ "$checkh" -gt 1 ] || [ "$checkd1" -gt 1 ] || [ "$checkd2" -gt 1 ] || [ "$checkd3" -gt 1 ] || [ "$checkd4" -gt 1 ] || [ "$checkd5" -gt 1 ] || [ "$checkl" -gt 1 ] || [ "$checkt" -gt 1 ] || [ "$checks" -gt 1 ] || [ "$checkp" -gt 1 ] ||  [ "$checkw" -gt 1 ]; then # If there is -h and no wrong option, print help
     echo 'You must specify option only one time.'
     exit 0
 elif [ "$checkh" -eq 1 ]; then
@@ -351,6 +379,9 @@ while [ "$#" -gt 0 ] ; do # Process every options
             ;;
         "-d4") 
             d4_process
+            ;;
+        "-d5") 
+            d5_process
             ;;
         "-l") 
             Lprocess 
