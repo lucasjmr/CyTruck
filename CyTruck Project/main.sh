@@ -194,7 +194,7 @@ Sprocess()
 
     # 3. Create plot
     echo 'Generating filledcurves plot ...'
-    echo "file = 'temp/dataS.csv'; set terminal png; set output 'images/S.png'; set datafile separator ';'; set title 'Option -s : Distance = f(Route)'; set xlabel 'ROUTE ID'; set ylabel 'DISTANCE (km)'; set xtics rotate by -45 scale 0 font ',8'; plot file using 0:5:3 with filledcurves title 'Distances Max/Min (km)', file using 0:4 smooth mcs with lines title 'Distance average (km)'" | gnuplot
+    echo "file = 'temp/dataS.csv'; set terminal png size 1500, 1000; set output 'images/S.png'; set datafile separator ';'; set title 'Option -s : Distance = f(Route)'; set xlabel 'ROUTE ID'; set ylabel 'DISTANCE (km)'; set rmargin 5; set xtics nomirror rotate by -45; plot file using 0:5:3 with filledcurves title 'Distances Max/Min (km)', file using 0:4:xticlabel(2) smooth mcs with lines linewidth 2 title 'Distance average (km)'" | gnuplot
 
 
     end_time=$(date +%s)
