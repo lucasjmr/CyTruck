@@ -34,7 +34,7 @@
 
 ## How to use
 
-- Download the game source files.
+- Download the source files.
 - Open a terminal window and navigate to the directory containing the source files.
 - To run the program you need to type the following command:
 ```bibtex
