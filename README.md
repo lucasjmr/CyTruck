@@ -38,7 +38,8 @@
 - Open a terminal window and navigate to the directory containing the source files.
 - To run the program you need to type the following command:
 ```bibtex
-./main.sh <path-to-csv-file> [OPTION1] [OPTION2] [...] [OPTION5]"```
+./main.sh <path-to-csv-file> [OPTION1] [OPTION2] [...] [OPTION5]"
+```
 
 ## All the options
 
