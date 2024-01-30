@@ -136,7 +136,7 @@ Lprocess()
     echo 'Starting L process ...'
     start_time=$(date +%s)
 
-    awk -F';' ' NR > 1 {route_array[$1]+=$5} END {for (i in route_array) print i ";" route_array[i]}' "$CSV_PATH" | sort -t';' -k2 -n | tail -n10 | sort -r > temp/dataL.csv
+    awk -F';' ' NR > 1 {route_array[$1]+=$5} END {for (i in route_array) print i ";" route_array[i]}' "$CSV_PATH" | sort -t';' -k2 -n | tail -n10 | sort -nr > temp/dataL.csv
     # NR > 1 : Removes the useless first line containing data infos
     # 
     # AWK - 
