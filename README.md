@@ -56,10 +56,6 @@ First of all let's talk about the mandatory options:
 Now the new options:
 - Option D3: creates an horizontal histogram in "images" with last 10 drivers by number of routes.
 - Option D4: creates an horizontal histogram in "images" with top 10 drivers by number of kilometers traveled.
+- Option D5 : creates an horizontal histogram in "images/" with top 10 routesID by number of steps.
 - Option W: create a fabulous Welcome text animation.
 - Option P: it's an easter egg.
-
-commit 29/01/2024 : rien n'a changé
-
-reste a faire : fixe le mainT.c
-                VERIF QUE LES MUSIQUES SONT LA AVANT D'EXECUTER LES PROCESS
