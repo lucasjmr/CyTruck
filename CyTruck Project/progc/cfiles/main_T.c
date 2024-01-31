@@ -145,7 +145,16 @@ pAVL InsertInAVL(pAVL root, char *town, int *h, int start_or_end)
     {
         *h = 0;
 
-        if (/* PAS DEJA RENCONTRE LA MEME ROUTEID */)
+        // UPDATE INFOS
+        root->TotalRouteNumber++;
+        if (start_or_end == 1)
+        {
+            root->Start++;
+        }
+        return root;
+
+        /*
+        if ( PAS DEJA RENCONTRE LA MEME ROUTEID )
         {
             if (start_or_end == 1)
             {
@@ -164,7 +173,7 @@ pAVL InsertInAVL(pAVL root, char *town, int *h, int start_or_end)
                 root->Start++;
             }
         }
-        return root;
+        */
     }
 
     if (*h != 0)
@@ -235,8 +244,8 @@ TopCities *GetCityInfo(pAVL root, TopCities *array, int *index)
                 array[minIndex].Start = root->Start;
             }
         }
-        return array;
     }
+    return array;
 }
 
 TopCities *CreateTop10CitiesArray(pAVL root)
@@ -253,9 +262,38 @@ TopCities *CreateTop10CitiesArray(pAVL root)
     return GetCityInfo(root, array, &index);
 }
 
+TopCities *SortArray(TopCities *array)
+{
+    if (array == NULL)
+    {
+        printf("Array error.\n");
+        exit(1);
+    }
+
+    // Bubble sort
+    int i, j;
+    TopCities temp;
+
+    for (i = 0; i < 9; i++)
+    {
+        for (j = 0; j < 9 - i; j++)
+        {
+            if (strcmp(array[j].City, array[j + 1].City) > 0)
+            {
+                temp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = temp;
+            }
+        }
+    }
+
+    return array;
+}
+
 void PrintDataInCSV(TopCities *array)
 {
-    FILE *file = fopen("temp/dataT.csv", "w");
+    array = SortArray(array);
+    FILE *file = fopen("../../temp/dataT.csv", "w");
     if (file == NULL)
     {
         printf("Error while trying to create dataT.csv\n");
@@ -274,7 +312,7 @@ int main(int argc, char *argv[])
     char header[256];
     int h = 0;
 
-    FILE *file = fopen(argv[1], "r");
+    FILE *file = fopen("../../data/data.csv", "r");
     if (file == NULL)
     {
         printf("Error while trying to open csv file.\n");
