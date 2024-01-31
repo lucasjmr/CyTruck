@@ -247,6 +247,12 @@ TopRouteID *CreateTop50RoutesArray(pAVL root)
 
 TopRouteID *SortArray(TopRouteID *array)
 {
+    if (array == NULL)
+    {
+        printf("Array error.\n");
+        exit(1);
+    }
+    
     // Bubble sort
     int i, j;
     TopRouteID temp;
