@@ -1,5 +1,34 @@
 #include "../headers/header_T.h"
 
+/*
+City *CreateCityNode(char *cityname)
+{
+    City *node = malloc(sizeof(City));
+
+    if (node == NULL)
+    {
+        printf("Error while creating node.\n");
+        exit(1);
+    }
+
+    strcpy(node->City, cityname);
+    node->nbr = 1;
+    node->next = NULL;
+
+    return node;
+}
+
+City *InsertCityNode(City *node, char *cityname)
+{
+    City *Newnode = CreateCityNode(cityname);
+    Newnode->next = node;
+    node = Newnode;
+    return node;
+}
+*/
+
+// -------------------------------------------------------------------------------------------------------------------------
+
 int min(int a, int b)
 {
     return (a < b) ? a : b;
@@ -141,39 +170,15 @@ pAVL InsertInAVL(pAVL root, char *town, int *h, int start_or_end)
     {
         root->right = InsertInAVL(root->right, town, h, start_or_end);
     }
-    else // Town already exists
+    else // Town already exists in AVL
     {
         *h = 0;
-
-        // UPDATE INFOS
         root->TotalRouteNumber++;
+
         if (start_or_end == 1)
         {
             root->Start++;
         }
-        return root;
-
-        /*
-        if ( PAS DEJA RENCONTRE LA MEME ROUTEID )
-        {
-            if (start_or_end == 1)
-            {
-                root->Start++;
-                root->TotalRouteNumber++;
-            }
-            else if (start_or_end == 2)
-            {
-                root->TotalRouteNumber++;
-            }
-        }
-        else // ON A DEJA RENCONTRE : CAS ville d'arrivée et depart de l'autre etape.
-        {
-            if (start_or_end == 1) // le premier cas etait la ville d'arrivée, donc on augmente de 1 la ville de départ.
-            {
-                root->Start++;
-            }
-        }
-        */
     }
 
     if (*h != 0)
@@ -293,7 +298,7 @@ TopCities *SortArray(TopCities *array)
 void PrintDataInCSV(TopCities *array)
 {
     array = SortArray(array);
-    FILE *file = fopen("../../temp/dataT.csv", "w");
+    FILE *file = fopen("temp/dataT.csv", "w");
     if (file == NULL)
     {
         printf("Error while trying to create dataT.csv\n");
@@ -312,7 +317,7 @@ int main(int argc, char *argv[])
     char header[256];
     int h = 0;
 
-    FILE *file = fopen("../../data/data.csv", "r");
+    FILE *file = fopen("data/data.csv", "r");
     if (file == NULL)
     {
         printf("Error while trying to open csv file.\n");
@@ -339,5 +344,6 @@ int main(int argc, char *argv[])
     PrintDataInCSV(topCitiesArray);
 
     // No need to free AVL and array because program terminates
+
     return 0;
 }
