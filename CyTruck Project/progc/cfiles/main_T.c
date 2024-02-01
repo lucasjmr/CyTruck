@@ -1,34 +1,5 @@
 #include "../headers/header_T.h"
 
-/*
-City *CreateCityNode(char *cityname)
-{
-    City *node = malloc(sizeof(City));
-
-    if (node == NULL)
-    {
-        printf("Error while creating node.\n");
-        exit(1);
-    }
-
-    strcpy(node->City, cityname);
-    node->nbr = 1;
-    node->next = NULL;
-
-    return node;
-}
-
-City *InsertCityNode(City *node, char *cityname)
-{
-    City *Newnode = CreateCityNode(cityname);
-    Newnode->next = node;
-    node = Newnode;
-    return node;
-}
-*/
-
-// -------------------------------------------------------------------------------------------------------------------------
-
 int min(int a, int b)
 {
     return (a < b) ? a : b;
