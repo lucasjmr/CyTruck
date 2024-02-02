@@ -40,3 +40,4 @@ TopRouteID *GetRouteInfo(pAVL root, TopRouteID *array, int *index);
 TopRouteID *CreateTop50RoutesArray(pAVL root);
 TopRouteID *SortArray(TopRouteID *array);
 void PrintDataInCSV(TopRouteID *array);
+void freeAVL(pAVL root);
