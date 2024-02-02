@@ -1,28 +1,28 @@
 #include "../headers/header_S.h"
 
-int min(int a, int b)
+int min(int a, int b) // returns min value of 2 args
 {
     return (a < b) ? a : b;
 }
 
-int max(int a, int b)
+int max(int a, int b) // returns max value of 2 args
 {
     return (a > b) ? a : b;
 }
 
-int min3(int a, int b, int c)
+int min3(int a, int b, int c) // returns min values of 3 args
 {
     int temp = (a < b) ? a : b;
     return (temp < c) ? temp : c;
 }
 
-int max3(int a, int b, int c)
+int max3(int a, int b, int c) // returns max values of 3 args
 {
     int temp = (a > b) ? a : b;
     return (temp > c) ? temp : c;
 }
 
-pAVL CreateAVL(int RouteID, float distance)
+pAVL CreateAVL(int RouteID, float distance) // create avl node with routeid and distance
 {
     pAVL node = malloc(sizeof(struct AVL_S));
     if (node == NULL)
@@ -30,7 +30,8 @@ pAVL CreateAVL(int RouteID, float distance)
         printf("Error while creating AVL node.\n");
         exit(1);
     }
-
+	
+	// init node values
     node->state = 0;
     node->RouteID = RouteID;
     node->sum = distance;
@@ -42,7 +43,7 @@ pAVL CreateAVL(int RouteID, float distance)
     return node;
 }
 
-pAVL LeftRotate(pAVL root)
+pAVL LeftRotate(pAVL root) // Function to manage AVL
 {
     pAVL pivot;
     int root_state, pivot_state;
@@ -61,7 +62,7 @@ pAVL LeftRotate(pAVL root)
     return root;
 }
 
-pAVL RightRotate(pAVL root)
+pAVL RightRotate(pAVL root) // Function to manage AVL
 {
     pAVL pivot;
     int root_state, pivot_state;
@@ -80,19 +81,19 @@ pAVL RightRotate(pAVL root)
     return root;
 }
 
-pAVL DoubleLeftRotate(pAVL root)
+pAVL DoubleLeftRotate(pAVL root) // Function to manage AVL
 {
     root->right = RightRotate(root->right);
     return LeftRotate(root);
 }
 
-pAVL DoubleRightRotate(pAVL root)
+pAVL DoubleRightRotate(pAVL root) // Function to manage AVL
 {
     root->left = LeftRotate(root->left);
     return RightRotate(root);
 }
 
-pAVL BalanceAVL(pAVL root)
+pAVL BalanceAVL(pAVL root) // Function to manage AVL
 {
     pAVL temp;
 
@@ -123,7 +124,7 @@ pAVL BalanceAVL(pAVL root)
     return root;
 }
 
-pAVL InsertInAVL(pAVL root, int RouteID, float distance, int *h)
+pAVL InsertInAVL(pAVL root, int RouteID, float distance, int *h) // Inserts in AVL 
 {
     if (root == NULL)
     {
@@ -172,8 +173,14 @@ pAVL InsertInAVL(pAVL root, int RouteID, float distance, int *h)
     return root;
 }
 
-pAVL CreateAVLfromCSV(FILE *file, pAVL root, int *h)
+pAVL CreateAVLfromCSV(FILE *file, pAVL root, int *h) // Creates avl from values gathered in csv file
 {
+	if (root == NULL)
+	{
+		printf("root NULL in createavlfromcsv.\n");
+		exit(1);
+	}
+
     int RouteID;
     float distance;
 
@@ -185,7 +192,7 @@ pAVL CreateAVLfromCSV(FILE *file, pAVL root, int *h)
     return root;
 }
 
-TopRouteID *GetRouteInfo(pAVL root, TopRouteID *array, int *index)
+TopRouteID *GetRouteInfo(pAVL root, TopRouteID *array, int *index) // FILLS the array of top max-min distances
 {
     if (root != NULL)
     {
@@ -200,7 +207,7 @@ TopRouteID *GetRouteInfo(pAVL root, TopRouteID *array, int *index)
             array[*index].MaxStepDistance = root->MaxStepDistance;
             (*index)++;
         }
-        else
+        else // array is full -> compare lowest value of array and replace if root->max-min is greater
         {
             int minIndex = 0;                                                  // index of lowest (max-min)
             int minDiff = array[0].MaxStepDistance - array[0].MinStepDistance; // the lowest is for now the first max-min of the array
@@ -231,8 +238,14 @@ TopRouteID *GetRouteInfo(pAVL root, TopRouteID *array, int *index)
     return array;
 }
 
-TopRouteID *CreateTop50RoutesArray(pAVL root)
+TopRouteID *CreateTop50RoutesArray(pAVL root) // creates the array of top distances max-min
 {
+	if (root == NULL)
+	{
+		printf("root NULL in createtop50routesarray.\n");
+		exit(1);
+	}
+
     // Create Array
     TopRouteID *array = malloc(50 * sizeof(TopRouteID));
     if (array == NULL)
@@ -245,7 +258,7 @@ TopRouteID *CreateTop50RoutesArray(pAVL root)
     return GetRouteInfo(root, array, &index);
 }
 
-TopRouteID *SortArray(TopRouteID *array)
+TopRouteID *SortArray(TopRouteID *array) // Sort the array for gnuplot process later
 {
     if (array == NULL)
     {
@@ -276,8 +289,14 @@ TopRouteID *SortArray(TopRouteID *array)
     return array;
 }
 
-void PrintDataInCSV(TopRouteID *array)
+void PrintDataInCSV(TopRouteID *array) // Prints the sorted data in a new csv
 {
+	if (array == NULL)
+	{
+		printf("array NULL in printdataincsv.\n");
+		exit(1);
+	}
+
     FILE *file = fopen("temp/dataS.csv", "w");
     if (file == NULL)
     {
