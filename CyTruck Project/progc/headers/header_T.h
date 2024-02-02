@@ -38,3 +38,4 @@ TopCities *GetCityInfo(pAVL root, TopCities *array, int *index);
 TopCities *CreateTop10CitiesArray(pAVL root);
 TopCities *SortArray(TopCities *array);
 void PrintDataInCSV(TopCities *array);
+void freeAVL(pAVL root);
