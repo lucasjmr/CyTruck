@@ -304,6 +304,16 @@ void PrintDataInCSV(TopCities *array) // Printfs the gathered data in a new file
     fclose(file);
 }
 
+void freeAVL(pAVL root) // free AVL
+{
+	if (root != NULL) 
+	{
+		freeAVL(root->left);
+		freeAVL(root->right);
+		free(root);
+	}
+}
+
 int main(int argc, char *argv[])
 {
     char town1[64], town2[64];
@@ -336,7 +346,7 @@ int main(int argc, char *argv[])
     TopCities *topCitiesArray = CreateTop10CitiesArray(root);
     PrintDataInCSV(topCitiesArray);
 
-    // No need to free AVL and array because program terminates
-
+    free(topCitiesArray);
+    freeAVL(root);
     return 0;
 }
