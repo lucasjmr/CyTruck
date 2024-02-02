@@ -312,6 +312,16 @@ void PrintDataInCSV(TopRouteID *array) // Prints the sorted data in a new csv
     fclose(file);
 }
 
+void freeAVL(pAVL root) // free AVL
+{
+	if (root != NULL) 
+	{
+		freeAVL(root->left);
+		freeAVL(root->right);
+		free(root);
+	}
+}
+
 int main(int argc, char *argv[])
 {
     int RouteID;
@@ -345,6 +355,7 @@ int main(int argc, char *argv[])
     TopRouteID *topRoutesIdArray = CreateTop50RoutesArray(root);
     PrintDataInCSV(topRoutesIdArray);
 
-    // No need to free AVL and array because program terminates
+    free(topRoutesIdArray);
+	freeAVL(root);
     return 0;
 }
