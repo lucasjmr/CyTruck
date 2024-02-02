@@ -19,3 +19,12 @@ $(T) : $(C_T) $(HEADER_T)
 
 $(S) : $(C_S) $(HEADER_S)
 	$(CC) $< -o $@
+	
+cleanhere : 
+	rm -r ../../temp
+	rm -f ../../images/*
+	
+cleanfrommainsh :
+	rm -r temp/
+	rm -f images/*
+	
