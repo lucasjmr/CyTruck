@@ -1,28 +1,28 @@
 #include "../headers/header_T.h"
 
-int min(int a, int b)
+int min(int a, int b) // returns min of the two numbers in arg
 {
     return (a < b) ? a : b;
 }
 
-int max(int a, int b)
+int max(int a, int b) // returns max of the two numbers in arg
 {
     return (a > b) ? a : b;
 }
 
-int min3(int a, int b, int c)
+int min3(int a, int b, int c) // returns min of 3 args
 {
     int temp = (a < b) ? a : b;
     return (temp < c) ? temp : c;
 }
 
-int max3(int a, int b, int c)
+int max3(int a, int b, int c) // returns max of 3 args
 {
     int temp = (a > b) ? a : b;
     return (temp > c) ? temp : c;
 }
 
-pAVL CreateAVL(char *town, int start_or_end)
+pAVL CreateAVL(char *town, int start_or_end) // creates avl node with given town name in arg
 {
     pAVL node = malloc(sizeof(struct AVL_T));
     if (node == NULL)
@@ -30,7 +30,8 @@ pAVL CreateAVL(char *town, int start_or_end)
         printf("Error while creating AVL node.\n");
         exit(1);
     }
-
+	
+	// init values of node
     strcpy(node->City, town);
     node->Start = 0;
     if (start_or_end == 1)
@@ -44,7 +45,7 @@ pAVL CreateAVL(char *town, int start_or_end)
     return node;
 }
 
-pAVL LeftRotate(pAVL root)
+pAVL LeftRotate(pAVL root) // function to manage AVL
 {
     pAVL pivot;
     int root_state, pivot_state;
@@ -63,7 +64,7 @@ pAVL LeftRotate(pAVL root)
     return root;
 }
 
-pAVL RightRotate(pAVL root)
+pAVL RightRotate(pAVL root) // function to manage AVL
 {
     pAVL pivot;
     int root_state, pivot_state;
@@ -82,19 +83,19 @@ pAVL RightRotate(pAVL root)
     return root;
 }
 
-pAVL DoubleLeftRotate(pAVL root)
+pAVL DoubleLeftRotate(pAVL root) // function to manage AVL
 {
     root->right = RightRotate(root->right);
     return LeftRotate(root);
 }
 
-pAVL DoubleRightRotate(pAVL root)
-{
+pAVL DoubleRightRotate(pAVL root) // function to manage AVL
+{ 
     root->left = LeftRotate(root->left);
     return RightRotate(root);
 }
 
-pAVL BalanceAVL(pAVL root)
+pAVL BalanceAVL(pAVL root) // function to manage AVL
 {
     pAVL temp;
 
@@ -125,9 +126,9 @@ pAVL BalanceAVL(pAVL root)
     return root;
 }
 
-pAVL InsertInAVL(pAVL root, char *town, int *h, int start_or_end)
+pAVL InsertInAVL(pAVL root, char *town, int *h, int start_or_end) // Insert in AVL a given town with info if it's start or end.
 {
-    if (root == NULL)
+    if (root == NULL) // Towns isnt in AVL
     {
         *h = 1;
         return CreateAVL(town, start_or_end);
@@ -144,12 +145,16 @@ pAVL InsertInAVL(pAVL root, char *town, int *h, int start_or_end)
     else // Town already exists in AVL
     {
         *h = 0;
-        root->TotalRouteNumber++;
-
-        if (start_or_end == 1)
+        if(start_or_end == 1)
         {
-            root->Start++;
+        	root->Start++;
+        	root->TotalRouteNumber++;
         }
+        else if (start_or_end == 2)
+        {
+        	root->TotalRouteNumber++;
+        }
+        
     }
 
     if (*h != 0)
@@ -168,8 +173,13 @@ pAVL InsertInAVL(pAVL root, char *town, int *h, int start_or_end)
     return root;
 }
 
-pAVL CreateAVLfromCSV(FILE *file, pAVL root, int *h)
+pAVL CreateAVLfromCSV(FILE *file, pAVL root, int *h) // Gets data in CSV and create the AVL with
 {
+	if (root == NULL)
+	{
+		printf("root NULL in createavlfromcsv.\n");
+		exit(1);
+	}
 
     char town1[64], town2[64];
 
@@ -182,7 +192,7 @@ pAVL CreateAVLfromCSV(FILE *file, pAVL root, int *h)
     return root;
 }
 
-TopCities *GetCityInfo(pAVL root, TopCities *array, int *index)
+TopCities *GetCityInfo(pAVL root, TopCities *array, int *index) // Fills the array with top cities
 {
     if (root != NULL)
     {
@@ -224,9 +234,15 @@ TopCities *GetCityInfo(pAVL root, TopCities *array, int *index)
     return array;
 }
 
-TopCities *CreateTop10CitiesArray(pAVL root)
+TopCities *CreateTop10CitiesArray(pAVL root) // Creates the array which will be filled
 {
-    // Create Array
+	if (root == NULL)
+	{
+		printf("root NULL in createtop10citiesarray.\n");
+		exit(1);
+	}    
+
+	// Create Array
     TopCities *array = malloc(10 * sizeof(TopCities));
     if (array == NULL)
     {
@@ -238,14 +254,14 @@ TopCities *CreateTop10CitiesArray(pAVL root)
     return GetCityInfo(root, array, &index);
 }
 
-TopCities *SortArray(TopCities *array)
+TopCities *SortArray(TopCities *array) // Sorts the top cities array for later gnuplot process
 {
     if (array == NULL)
     {
         printf("Array error.\n");
         exit(1);
     }
-
+	
     // Bubble sort
     int i, j;
     TopCities temp;
@@ -266,8 +282,14 @@ TopCities *SortArray(TopCities *array)
     return array;
 }
 
-void PrintDataInCSV(TopCities *array)
+void PrintDataInCSV(TopCities *array) // Printfs the gathered data in a new file
 {
+	if (array == NULL)
+	{
+		printf("root NULL in printdataincsv.\n");
+		exit(1);
+	}
+
     array = SortArray(array);
     FILE *file = fopen("temp/dataT.csv", "w");
     if (file == NULL)
