@@ -36,4 +36,5 @@ pAVL InsertInAVL(pAVL root, char *town, int *h, int start_or_end);
 pAVL CreateAVLfromCSV(FILE *file, pAVL root, int *h);
 TopCities *GetCityInfo(pAVL root, TopCities *array, int *index);
 TopCities *CreateTop10CitiesArray(pAVL root);
+TopCities *SortArray(TopCities *array);
 void PrintDataInCSV(TopCities *array);
